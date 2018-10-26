@@ -1,9 +1,20 @@
 <component name="ProjectDictionaryState">
   <dictionary name="Dan">
     <words>
+      <w>clubid</w>
+      <w>constructlanes</w>
       <w>dcai</w>
+      <w>entryid</w>
+      <w>findrelevantevents</w>
+      <w>getdata</w>
+      <w>getresults</w>
       <w>iurl</w>
+      <w>laneslist</w>
+      <w>lanesout</w>
+      <w>organizationid</w>
+      <w>reauthed</w>
       <w>refreshtoken</w>
+      <w>regattaid</w>
       <w>rvekj</w>
       <w>validatetoken</w>
     </words>

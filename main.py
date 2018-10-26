@@ -40,7 +40,6 @@ class OAuth:
     # return token
     return t['access_token']
 
-
   def refreshtoken(self):
     print('refresh token')
     # refresh token after an hour
@@ -112,19 +111,26 @@ class Event:
         self.coxed = coxed
         self.entries = entries
         self.relevant_entries = relevant_entries
-    def boatdata(self):
-        pass # write me
+    def constructentries(self,):
+
+        pass
     def update(self):
         pass # write me too
 
-class Entries:
-    def __init__(self,label,lineup,bow,results,Id):
+class Entry:
+    def __init__(self,entryid,label,lineup,bow,organizationid):
         self.r = Main()
         self.lineup = lineup
         self.bow = bow
-        self.results = results
-        self.Id = Id
+        self.entryid = entryid
+        self.organizationid = organizationid
         self.lanes = self.constructlanes(r.getdata('/v4.0/regattas/'+regattaID+'/events/'))
+        self.label = label
+        self.position = 0
+        self.duration = 0.0
+    def getresults(self,position,duration):
+        self.position = position
+        self.duration = duration
     def constructlanes(self, data):
         lanesout = {}
         try:
@@ -134,6 +140,7 @@ class Entries:
         except IndexError:
             return None
         return lanesout
+
 
 r = Main()
 

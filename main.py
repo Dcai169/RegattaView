@@ -33,7 +33,7 @@ class OAuth:
     except json.decoder.JSONDecodeError:
       print(requests.post(APIurl+'/oauth2/api/token', data = {'client_id':self.client_id,'client_secret':self.client_secret,'username':self.username,'password':self.password,'grant_type':'password'}).text)
     # write token to variables
-    print('token recieved')
+    print('token received')
     self.access_token = t['access_token']
     self.expiry_time = t['expires_in'] + time()
     self.refresh_token = t['refresh_token']
@@ -117,7 +117,7 @@ class Event:
     def update(self):
         pass # write me too
 
-class Entires:
+class Entries:
     def __init__(self,label,lineup,bow,results,Id):
         self.r = Main()
         self.lineup = lineup

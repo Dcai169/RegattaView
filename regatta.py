@@ -58,7 +58,7 @@ class OAuth:
       return True
 
 
-class Main:
+class Regatta:
   def __init__(self):
     print('started fetching data')
     self.oauth = OAuth()
@@ -104,45 +104,47 @@ class Main:
       return relevant_entry_ids
 
 class Event:
-    def __init__(self, number, title, final_race_time, coxed, entries, relevant_entries):
-        self.number = number
+    def __init__(self, eventid, title, sequence, final_race_time, coxed, entries, relevant_entries):
+        self.eventid = eventid
         self.title = title
+        self.sequence = sequence
         self.final_race_time = final_race_time
         self.coxed = coxed
         self.entries = entries
         self.relevant_entries = relevant_entries
-    def constructentries(self,):
 
-        pass
     def update(self):
         pass # write me too
 
 class Entry:
-    def __init__(self,entryid,label,lineup,bow,organizationid):
-        self.r = Main()
+    def __init__(self, entryid, label, lineup, bow):
+        self.r = Regatta()
         self.lineup = lineup
         self.bow = bow
         self.entryid = entryid
-        self.organizationid = organizationid
-        self.lanes = self.constructlanes(r.getdata('/v4.0/regattas/'+regattaID+'/events/'))
+        self.organizationid = clubID
+        self.lanes = self.getlane(r.getdata('/v4.0/regattas/' + regattaID + '/events/'),self.entryid)
         self.label = label
         self.position = 0
         self.duration = 0.0
+
     def getresults(self,position,duration):
         self.position = position
         self.duration = duration
-    def constructlanes(self, data):
-        lanesout = {}
+
+    def getlane(self, data, entryid):
         try:
             laneslist = data['data'][0]['races'][0]['lanes']
             for i in range(len(laneslist)):
-                lanesout[laneslist[i]['entryId']] = laneslist[i]['lane']
+                if laneslist[i]['entryId'] == entryid:
+                    return laneslist[i]['lane']
         except IndexError:
             return None
-        return lanesout
+        else:
+            return 0
 
 
-r = Main()
+r = Regatta()
 
 def constructevents(clubid, regattaid):
     events = r.findrelevantevents(r.getdata('/v4.0/regattas/'+regattaid+'/events/'),clubid)
@@ -154,14 +156,35 @@ def constructevents(clubid, regattaid):
         relevantevents.append(event)
     return relevantevents
 
+def constructentries(regattaid, eventid):
+    eventdetails = r.getdata('/v4.0/regattas/'+regattaid+'/events/'+eventid+'/entries')
+    events = r.getdata('/v4.0/regattas/'+regattaid+'/events')
+    entries = []
+    for i in range(eventdetails['count']):
+        entryid = str(eventdetails['data'][i]['entryId'])
+        entrylabel = eventdetails['data'][i]['entryLabel']
+        lanesdata = r.getdata('/v4.0/regattas/'+regattaid+'/entries/'+entryid)
+        lineup = []
+        for j in range(len(lanesdata['data']['entryParticipants'][0])):
+            lineup.append(lanesdata['data']['entryParticipants'][0]['name'])
+        pp.pprint(lineup)
+        # e = Entry(entryid,entrylabel,lineup)
+        # entries.append(e)
 
 print('\n'+'='*25+'\n')
-print(r.getevents(r.getdata('/v4.0/regattas/'+regattaID+'/events')))
+events = r.getevents(r.getdata('/v4.0/regattas/'+regattaID+'/events'))
+print(events)
+numbers = []
+for i in range(len(events)):
+    numbers.append(i+1)
+print(numbers)
+# print('\n'+'='*25+'\n')
+# pp.pprint(constructevents(clubID, regattaID))
+# print('\n'+'='*25+'\n')
+# pp.pprint(r.getdata('/v4.0/regattas/'+regattaID+'/events/'))
+# print('\n'+'='*25+'\n')
+# pp.pprint(r.getdata('/v4.0/regattas/'+regattaID+'/entries/91')['data']['entryParticipants'][0])
+# print('\n'+'='*25+'\n')
+# pp.pprint(r.getdata('/v4.0/regattas/'+regattaID+'/events/21/entries'))
 print('\n'+'='*25+'\n')
-pp.pprint(constructevents(clubID, regattaID))
-print('\n'+'='*25+'\n')
-pp.pprint(r.getdata('/v4.0/regattas/'+regattaID+'/events/'))
-print('\n'+'='*25+'\n')
-pp.pprint(r.getdata('/v4.0/regattas/'+regattaID+'/entries/123'))
-print('\n'+'='*25+'\n')
-pp.pprint(r.getdata('/v4.0/regattas/'+regattaID+'/events/9/entries'))
+constructentries(regattaID,'21')

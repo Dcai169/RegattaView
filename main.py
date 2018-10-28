@@ -110,8 +110,8 @@ class Regatta:
         return relevant_event_ids
 
     def buildevents(self, clubid):
-        allevents = m.getdata('/v4.0/regattas/'+regattaID+'/events')['data']
-        eventstobuild = m.findrelevantevents(clubid)
+        allevents = self.getdata('/v4.0/regattas/'+regattaID+'/events')['data']
+        eventstobuild = self.findrelevantevents()
         for i in range(len(eventstobuild)):
             events = []
             title = ''
@@ -205,6 +205,6 @@ class Entry:
 m = Regatta()
 
 print('\n'+'='*25+'\n')
-print(m.getevents())
+pp.pprint(m.events)
 print('\n'+'='*25+'\n')
 

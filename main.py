@@ -205,6 +205,6 @@ class Entry:
 m = Regatta()
 
 print('\n'+'='*25+'\n')
-print(m.getevents())
+pp.pprint(m.events)
 print('\n'+'='*25+'\n')
 

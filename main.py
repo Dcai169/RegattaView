@@ -91,11 +91,11 @@ class Regatta:
         # events
         self.events = []
 
-    def findrelevantentries(self,data,clubid):
+    def findrelevantentries(self,data):
         print('sorting entries')
         relevant_entry_ids = []
         for j in range(data['count']):
-            if str(data['data'][j]['organizationId']) == clubid:
+            if str(data['data'][j]['organizationId']) == clubID:
               relevant_entry_ids.append(data['data'][j]['entryId'])
         return relevant_entry_ids
 

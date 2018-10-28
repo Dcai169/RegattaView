@@ -110,9 +110,10 @@ class Regatta:
         return relevant_event_ids
 
     def buildevents(self, clubid):
-        allevents = m.getdata('/v4.0/regattas/'+regattaID+'/events')['data']
-        eventstobuild = m.findrelevantevents(clubid)
+        allevents = self.getdata('/v4.0/regattas/'+regattaID+'/events')['data']
+        eventstobuild = self.findrelevantevents()
         for i in range(len(eventstobuild)):
+            print(i)
             events = []
             title = ''
             sequence = 0

@@ -8,7 +8,7 @@ global regattaID
 global clubID
 global r
 pp = pprint.PrettyPrinter()
-regattaID = '6033'
+regattaID = '5656'# '6033'
 clubID = '1072'
 APIurl = 'https://api.regattacentral.com'
 
@@ -170,9 +170,6 @@ class Event:
                 relevant_entry_ids.append(data['data'][j]['entryId'])
         return relevant_entry_ids
 
-    def update(self):
-        pass # write me
-
 
 class Entry:
     def __init__(self, eventid, entryid, label):
@@ -185,7 +182,7 @@ class Entry:
         self.position = 0
         self.timeelapsed = 0.0
 
-    def writeresults(self,position,timeelapsed):
+    def getresults(self,position,timeelapsed):
         self.position = position
         self.timeelapsed = timeelapsed
 
@@ -207,10 +204,12 @@ class Entry:
         except TypeError:
             return None
 
-
 m = Regatta()
 
 print('\n'+'='*25+'\n')
-pp.pprint(m.buildevents())
+print(m.getevents())
 print('\n'+'='*25+'\n')
+print(r.oauth.validatetoken())
+print('\n'+'='*25+'\n')
+pp.pprint(r.getdata('/v4.0/regattas/'+regattaID+'/events/3/results')['data'][0]['lanes'][0]) # replace the last zero with an iterative variable
 

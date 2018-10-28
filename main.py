@@ -127,7 +127,6 @@ class Regatta:
         else:
             eventstobuild = self.getevents()
         for i in range(len(eventstobuild)):
-            print('EventId: '+str(eventstobuild[i]))
             events = []
             title = ''
             sequence = 0
@@ -161,8 +160,6 @@ class Event:
         for i in range(len(data)):
             e = Entry(self.eventid,data[i]['entryId'],data[i]['entryLabel'])
             entries.append(e)
-            print(str(data[i]['entryId'])+', '+data[i]['entryLabel'])
-            i += 1
         return entries
 
     def getentrylist(self):
@@ -217,9 +214,11 @@ class Entry:
 m = Regatta()
 
 print('\n'+'='*25+'\n')
-print(m.buildevents(False))
+print(m.getevents())
 print('\n'+'='*25+'\n')
 print(r.oauth.validatetoken())
 print('\n'+'='*25+'\n')
-
+# pp.pprint(r.getdata('/v4.0/regattas/'+regattaID+'/races?active'))
+pp.pprint(r.getdata('/v4.0/regattas/'+regattaID+'/offlineResults')['data'][0]['url'])
+# pp.pprint(r.getdata('/v4.0/regattas/'+regattaID+'/events/3/results'))
 

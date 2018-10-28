@@ -145,6 +145,7 @@ class Regatta:
         return events
 
 
+# noinspection PyInterpreter
 class Event:
     def __init__(self, eventid, title, sequence, final_race_time, coxed):
         self.eventid = str(eventid)

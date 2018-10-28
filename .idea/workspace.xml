@@ -2,7 +2,11 @@
 <project version="4">
   <component name="BookmarkManager">
 <<<<<<< HEAD
+<<<<<<< HEAD
     <bookmark url="file://$PROJECT_DIR$/main.py" line="219" mnemonic="8" />
+=======
+    <bookmark url="file://$PROJECT_DIR$/main.py" line="215" mnemonic="8" />
+>>>>>>> parent of ee8be2a... fix buildentries infinite loop
 =======
     <bookmark url="file://$PROJECT_DIR$/main.py" line="215" mnemonic="8" />
 >>>>>>> parent of ee8be2a... fix buildentries infinite loop
@@ -89,14 +93,20 @@
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
 <<<<<<< HEAD
+<<<<<<< HEAD
             <state relative-caret-position="1709">
               <caret line="151" column="26" selection-start-line="151" selection-start-column="26" selection-end-line="151" selection-end-column="26" />
 =======
+=======
+>>>>>>> parent of ee8be2a... fix buildentries infinite loop
             <state relative-caret-position="172">
               <caret line="94" column="19" lean-forward="true" selection-start-line="94" selection-start-column="19" selection-end-line="94" selection-end-column="19" />
               <folding>
                 <element signature="e#15#37#0" expanded="true" />
               </folding>
+<<<<<<< HEAD
+>>>>>>> parent of ee8be2a... fix buildentries infinite loop
+=======
 >>>>>>> parent of ee8be2a... fix buildentries infinite loop
             </state>
           </provider>
@@ -126,8 +136,11 @@
       <list>
         <option value="$PROJECT_DIR$/regatta.py" />
 <<<<<<< HEAD
+<<<<<<< HEAD
         <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch.py" />
         <option value="$PROJECT_DIR$/.idea/workspace.xml" />
+=======
+>>>>>>> parent of ee8be2a... fix buildentries infinite loop
 =======
 >>>>>>> parent of ee8be2a... fix buildentries infinite loop
         <option value="$PROJECT_DIR$/main.py" />
@@ -168,7 +181,11 @@
     </navigator>
     <panes>
 <<<<<<< HEAD
+<<<<<<< HEAD
       <pane id="Scope" />
+=======
+      <pane id="AndroidView" />
+>>>>>>> parent of ee8be2a... fix buildentries infinite loop
 =======
       <pane id="AndroidView" />
 >>>>>>> parent of ee8be2a... fix buildentries infinite loop
@@ -185,7 +202,11 @@
       </pane>
       <pane id="PackagesPane" />
 <<<<<<< HEAD
+<<<<<<< HEAD
       <pane id="AndroidView" />
+=======
+      <pane id="Scope" />
+>>>>>>> parent of ee8be2a... fix buildentries infinite loop
 =======
       <pane id="Scope" />
 >>>>>>> parent of ee8be2a... fix buildentries infinite loop
@@ -257,6 +278,7 @@
       <method v="2" />
     </configuration>
 <<<<<<< HEAD
+<<<<<<< HEAD
     <configuration name="scratch" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="RegattaView" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -278,6 +300,8 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+=======
+>>>>>>> parent of ee8be2a... fix buildentries infinite loop
 =======
 >>>>>>> parent of ee8be2a... fix buildentries infinite loop
     <list>
@@ -312,7 +336,10 @@
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> parent of ee8be2a... fix buildentries infinite loop
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.12783661" />
       <window_info anchor="bottom" id="FRC" order="10" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32838285" />
@@ -346,6 +373,9 @@
 =======
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+<<<<<<< HEAD
+>>>>>>> parent of ee8be2a... fix buildentries infinite loop
+=======
 >>>>>>> parent of ee8be2a... fix buildentries infinite loop
     </layout>
   </component>
@@ -354,7 +384,10 @@
   </component>
   <component name="editorHistoryManager">
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> parent of ee8be2a... fix buildentries infinite loop
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4200">
@@ -406,11 +439,14 @@
       </provider>
     </entry>
 <<<<<<< HEAD
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1709">
           <caret line="151" column="26" selection-start-line="151" selection-start-column="26" selection-end-line="151" selection-end-column="26" />
 =======
+=======
+>>>>>>> parent of ee8be2a... fix buildentries infinite loop
     <entry file="file://$PROJECT_DIR$/regatta.py" />
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">

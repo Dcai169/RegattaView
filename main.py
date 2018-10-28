@@ -83,6 +83,7 @@ class Regatta:
             print(d.url)
         return json.loads(d.text)
   
+<<<<<<< HEAD:regatta.py
     def getevents(self,data):
         event_ids = []
         for i in range(len(data['data'])):
@@ -107,44 +108,114 @@ class Regatta:
             if str(data['data'][j]['organizationId']) == clubid:
               relevant_entry_ids.append(data['data'][j]['entryId'])
         return relevant_entry_ids
+=======
+  def getevents(self):
+    event_ids = []
+    data = self.getdata('/v4.0/regattas/'+regattaID+'/events/')
+    for i in range(len(data['data'])):
+          event_ids.append(data['data'][i]['eventId'])
+    return event_ids
+
+  def findrelevantevents(self):
+      print('sorting events')
+      temp = self.getdata('/v4.0/regattas/'+regattaID+'/organizations/'+clubID+'/events')
+      events = temp['data']
+      relevant_event_ids = []
+      for i in range(len(events)):
+          relevant_event_ids.append(events[i]['eventId'])
+      return relevant_event_ids
+
+  def buildevents(self, clubid):
+      allevents = m.getdata('/v4.0/regattas/'+regattaID+'/events')['data']
+      eventstobuild = m.findrelevantevents(clubid)
+      for i in range(len(eventstobuild)):
+          events = []
+          title = ''
+          sequence = 0
+          finalracetime = 0
+          coxed = False
+          for j in range(len(allevents)):
+              if allevents[j]['eventId'] == eventstobuild[i]:
+                  title = allevents[j]['title']
+                  sequence = allevents[j]['sequence']
+                  finalracetime = allevents[j]['finalRaceTime']
+                  coxed = allevents[j]['coxed']
+              e = Event(eventstobuild[i],title,sequence,finalracetime,coxed)
+              events.append(e)
+          return events
+>>>>>>> 8a2fe8f12971a75c48254f247f7d4fc05e7d1a98:main.py
 
 class Event:
-    def __init__(self, eventid, title, sequence, final_race_time, coxed, entries, relevant_entries):
+    def __init__(self, eventid, title, sequence, final_race_time, coxed):
+        self.m = Regatta()
         self.eventid = eventid
         self.title = title
         self.sequence = sequence
         self.final_race_time = final_race_time
         self.coxed = coxed
-        self.entries = entries
-        self.relevant_entries = relevant_entries
+        self.entries = self.buildentries() # list of Entry objs
+        self.relevant_entries = self.findrelevantentries() # list of relevant entryIds
+
+    def buildentries(self):
+        data = self.m.getdata('/v4.0/regattas/'+regattaID+'/events/'+self.eventid+'/entries')['data']
+        entries = []
+        for i in range(len(data)):
+            e = Entry(self.eventid,data[i]['entryId'],data[i]['label'])
+            entries.append(e)
+        return entries
+
+    def getentrylist(self):
+        data = m.getdata('/v4.0/regattas/'+regattaID+'/events/'+self.eventid+'/entries')['data']
+        entries = []
+        for i in range(len(data)):
+            entries.append(data[i]['entryId'])
+        return entries
+
+    def findrelevantentries(self):
+        data = self.m.getdata('/v4.0/regattas/'+regattaID+'/events/'+self.eventid+'/entries')
+        relevant_entry_ids = []
+        for j in range(data['count']):
+            if str(data['data'][j]['organizationId']) == clubID:
+                relevant_entry_ids.append(data['data'][j]['entryId'])
+        return relevant_entry_ids
 
     def update(self):
-        pass # write me too
+        pass # write me
 
 class Entry:
-    def __init__(self, entryid, label, lineup, bow):
-        self.r = Regatta()
-        self.lineup = lineup
-        self.bow = bow
+    def __init__(self, eventid, entryid, label):
+        self.m = Regatta()
+        self.eventid = eventid
         self.entryid = entryid
         self.organizationid = clubID
-        self.lanes = self.getlane(r.getdata('/v4.0/regattas/' + regattaID + '/events/'),self.entryid)
+        self.lane = self.getlane(self.entryid)
+        self.lineup = self.getlineup(self.entryid)
         self.label = label
         self.position = 0
-        self.duration = 0.0
+        self.timeelapsed = 0.0
 
-    def getresults(self,position,duration):
+    def getresults(self,position,timeelapsed):
         self.position = position
-        self.duration = duration
+        self.timeelapsed = timeelapsed
 
-    def getlane(self, data, entryid):
+    def getlane(self,entryid):
         try:
-            laneslist = data['data'][0]['races'][0]['lanes']
-            for i in range(len(laneslist)):
-                if laneslist[i]['entryId'] == entryid:
-                    return laneslist[i]['lane']
-        except IndexError:
+            lanedata = r.getdata('/v4.0/regattas/'+regattaID+'/events/'+entryid+'/lanes')['data'][0]['races'][0]['lanes']
+            for i in range(len(lanedata)):
+                if lanedata[i]['entryId'] == entryid:
+                    return lanedata[i]['lane']
+        except TypeError:
             return None
+
+    def getlineup(self, entryid):
+        try:
+            lineup = []
+            for i in range(len(self.m.getdata('/v4.0/regattas/'+regattaID+'/entries/'+entryid)['data']['entryParticipants'])):
+                lineup.append(self.m.getdata('/v4.0/regattas/'+regattaID+'/entries/'+entryid)['data']['entryParticipants'][i]['name'])
+            return lineup
+        except TypeError:
+            return None
+<<<<<<< HEAD:regatta.py
         else:
             return 0
 
@@ -152,3 +223,12 @@ class Entry:
 r = Regatta()
 print('\n'+'='*25+'\n')
 pp.pprint(r.getdata('/v4.0/regattas/' + regattaID)['data'])
+=======
+
+m = Regatta()
+
+print('\n'+'='*25+'\n')
+print(m.getevents())
+print('\n'+'='*25+'\n')
+
+>>>>>>> 8a2fe8f12971a75c48254f247f7d4fc05e7d1a98:main.py

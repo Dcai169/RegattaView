@@ -2,12 +2,9 @@
   <dictionary name="Patriot">
     <words>
       <w>allevents</w>
-      <w>buildallevents</w>
-      <w>buildentries</w>
       <w>buildevents</w>
       <w>eventstobuild</w>
       <w>finalracetime</w>
-      <w>outsidetiming</w>
     </words>
   </dictionary>
 </component>

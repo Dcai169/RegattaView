@@ -8,7 +8,7 @@ global regattaID
 global clubID
 global r
 pp = pprint.PrettyPrinter()
-regattaID = '6033'
+regattaID = '5656'# '6033'
 clubID = '1072'
 APIurl = 'https://api.regattacentral.com'
 
@@ -90,11 +90,6 @@ class Regatta:
         self.venue = data['venue']
         # events
         self.events = []
-        offlineresults = r.getdata('/v4.0/regattas/'+regattaID+'/offlineResults')
-        if offlineresults['count'] == 0:
-            self.outsidetiming = None
-        else:
-            self.outsidetiming = offlineresults['data'][0]['url']
 
     def findrelevantentries(self,data,clubid):
         print('sorting entries')
@@ -120,12 +115,10 @@ class Regatta:
             relevant_event_ids.append(events[i]['eventId'])
         return relevant_event_ids
 
-    def buildevents(self, buildallevents):
+    def buildevents(self):
         allevents = r.getdata('/v4.0/regattas/'+regattaID+'/events')['data']
-        if buildallevents == False:
-            eventstobuild = self.findrelevantevents()
-        else:
-            eventstobuild = self.getevents()
+        eventlist = self.getevents()
+        eventstobuild = self.findrelevantevents()
         for i in range(len(eventstobuild)):
             events = []
             title = ''
@@ -218,7 +211,5 @@ print(m.getevents())
 print('\n'+'='*25+'\n')
 print(r.oauth.validatetoken())
 print('\n'+'='*25+'\n')
-# pp.pprint(r.getdata('/v4.0/regattas/'+regattaID+'/races?active'))
-pp.pprint(r.getdata('/v4.0/regattas/'+regattaID+'/offlineResults')['data'][0]['url'])
-# pp.pprint(r.getdata('/v4.0/regattas/'+regattaID+'/events/3/results'))
+pp.pprint(r.getdata('/v4.0/regattas/'+regattaID+'/events/3/results')['data'][0]['lanes'][0]) # replace the last zero with an iterative variable
 

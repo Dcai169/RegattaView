@@ -115,14 +115,11 @@ class Regatta:
             relevant_event_ids.append(events[i]['eventId'])
         return relevant_event_ids
 
-<<<<<<< HEAD
     def buildevents(self, clubid):
         allevents = self.getdata('/v4.0/regattas/'+regattaID+'/events')['data']
-=======
     def buildevents(self):
         allevents = r.getdata('/v4.0/regattas/'+regattaID+'/events')['data']
         eventlist = self.getevents()
->>>>>>> 0e3a74bffb5a25154b180c6f4b436325a4b13995
         eventstobuild = self.findrelevantevents()
         for i in range(len(eventstobuild)):
             print(i)

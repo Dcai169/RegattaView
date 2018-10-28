@@ -6,11 +6,11 @@ import pprint
 import json
 global regattaID
 global clubID
+global r
 pp = pprint.PrettyPrinter()
 regattaID = '6033'
 clubID = '1072'
 APIurl = 'https://api.regattacentral.com'
-
 
 class OAuth:
   def __init__(self):
@@ -50,6 +50,7 @@ class OAuth:
     else:
       self.expiry_time = t['expires_in'] + time()
       self.access_token = t['access_token']
+
   def validatetoken(self):
     t = json.loads(requests.post(APIurl+'/oauth2/api/validate', data = {'token':self.access_token}).text)
     if 'error' in t:
@@ -57,22 +58,14 @@ class OAuth:
     else:
       return True
 
-
-class Regatta:
+class Reader:
     def __init__(self):
-        print('started fetching data')
         # authorization stuff
         self.oauth = OAuth()
         self.access_token = self.oauth.gettoken()
         self.headers = {'Authorization':self.access_token}
         self.reauthed = False
-        # metadata
-        data = self.getdata('/v4.0/regattas/' + regattaID)['data']
-        self.name = data['name']
-        self.dates = data['regattaDates']
-        self.venue = data['venue']
-        # events
-        self.events = self.buildevents(clubID)
+
     def getdata(self, path):
         d = requests.get(APIurl+path,headers=self.headers)
         print('data received')
@@ -85,6 +78,19 @@ class Regatta:
             print(d.url)
         return json.loads(d.text)
 
+r = Reader()
+
+class Regatta:
+    def __init__(self):
+        print('started fetching data')
+        # metadata
+        data = r.getdata('/v4.0/regattas/' + regattaID)['data']
+        self.name = data['name']
+        self.dates = data['regattaDates']
+        self.venue = data['venue']
+        # events
+        self.events = []
+
     def findrelevantentries(self,data,clubid):
         print('sorting entries')
         relevant_entry_ids = []
@@ -95,22 +101,28 @@ class Regatta:
 
     def getevents(self):
       event_ids = []
-      data = self.getdata('/v4.0/regattas/'+regattaID+'/events/')
+      data = r.getdata('/v4.0/regattas/'+regattaID+'/events/')
       for i in range(len(data['data'])):
             event_ids.append(data['data'][i]['eventId'])
       return event_ids
 
     def findrelevantevents(self):
         print('sorting events')
-        temp = self.getdata('/v4.0/regattas/'+regattaID+'/organizations/'+clubID+'/events')
+        temp = r.getdata('/v4.0/regattas/'+regattaID+'/organizations/'+clubID+'/events')
         events = temp['data']
         relevant_event_ids = []
         for i in range(len(events)):
             relevant_event_ids.append(events[i]['eventId'])
         return relevant_event_ids
 
+<<<<<<< HEAD
     def buildevents(self, clubid):
         allevents = self.getdata('/v4.0/regattas/'+regattaID+'/events')['data']
+=======
+    def buildevents(self):
+        allevents = r.getdata('/v4.0/regattas/'+regattaID+'/events')['data']
+        eventlist = self.getevents()
+>>>>>>> 0e3a74bffb5a25154b180c6f4b436325a4b13995
         eventstobuild = self.findrelevantevents()
         for i in range(len(eventstobuild)):
             print(i)
@@ -127,13 +139,13 @@ class Regatta:
                     coxed = allevents[j]['coxed']
                 e = Event(eventstobuild[i],title,sequence,finalracetime,coxed)
                 events.append(e)
+        self.events = events
         return events
 
 
 class Event:
     def __init__(self, eventid, title, sequence, final_race_time, coxed):
-        self.m = Regatta()
-        self.eventid = eventid
+        self.eventid = str(eventid)
         self.title = title
         self.sequence = sequence
         self.final_race_time = final_race_time
@@ -142,22 +154,22 @@ class Event:
         self.relevant_entries = self.findrelevantentries() # list of relevant entryIds
 
     def buildentries(self):
-        data = self.m.getdata('/v4.0/regattas/'+regattaID+'/events/'+self.eventid+'/entries')['data']
+        data = r.getdata('/v4.0/regattas/'+regattaID+'/events/'+self.eventid+'/entries')['data']
         entries = []
         for i in range(len(data)):
-            e = Entry(self.eventid,data[i]['entryId'],data[i]['label'])
+            e = Entry(self.eventid,data[i]['entryId'],data[i]['entryLabel'])
             entries.append(e)
         return entries
 
     def getentrylist(self):
-        data = m.getdata('/v4.0/regattas/'+regattaID+'/events/'+self.eventid+'/entries')['data']
+        data = r.getdata('/v4.0/regattas/'+regattaID+'/events/'+self.eventid+'/entries')['data']
         entries = []
         for i in range(len(data)):
             entries.append(data[i]['entryId'])
         return entries
 
     def findrelevantentries(self):
-        data = self.m.getdata('/v4.0/regattas/'+regattaID+'/events/'+self.eventid+'/entries')
+        data = r.getdata('/v4.0/regattas/'+regattaID+'/events/'+self.eventid+'/entries')
         relevant_entry_ids = []
         for j in range(data['count']):
             if str(data['data'][j]['organizationId']) == clubID:
@@ -170,7 +182,6 @@ class Event:
 
 class Entry:
     def __init__(self, eventid, entryid, label):
-        self.m = Regatta()
         self.eventid = eventid
         self.entryid = entryid
         self.organizationid = clubID
@@ -180,7 +191,7 @@ class Entry:
         self.position = 0
         self.timeelapsed = 0.0
 
-    def getresults(self,position,timeelapsed):
+    def writeresults(self,position,timeelapsed):
         self.position = position
         self.timeelapsed = timeelapsed
 
@@ -196,8 +207,8 @@ class Entry:
     def getlineup(self, entryid):
         try:
             lineup = []
-            for i in range(len(self.m.getdata('/v4.0/regattas/'+regattaID+'/entries/'+entryid)['data']['entryParticipants'])):
-                lineup.append(self.m.getdata('/v4.0/regattas/'+regattaID+'/entries/'+entryid)['data']['entryParticipants'][i]['name'])
+            for i in range(len(r.getdata('/v4.0/regattas/'+regattaID+'/entries/'+entryid)['data']['entryParticipants'])):
+                lineup.append(r.getdata('/v4.0/regattas/'+regattaID+'/entries/'+entryid)['data']['entryParticipants'][i]['name'])
             return lineup
         except TypeError:
             return None
@@ -206,6 +217,6 @@ class Entry:
 m = Regatta()
 
 print('\n'+'='*25+'\n')
-pp.pprint(m.events)
+pp.pprint(m.buildevents())
 print('\n'+'='*25+'\n')
 

@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/main.py" line="219" mnemonic="8" />
+    <bookmark url="file://$PROJECT_DIR$/main.py" line="218" mnemonic="8" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8cf4bbbf-3941-4a66-ba08-2c78c84ad1bd" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-    </list>
+    <list default="true" id="8cf4bbbf-3941-4a66-ba08-2c78c84ad1bd" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -68,13 +65,11 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="py" value="1" />
-          <entry key="xml" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="Python" value="1" />
-          <entry key="XML" value="1" />
         </counts>
       </usages-collector>
     </session>
@@ -84,8 +79,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1709">
-              <caret line="151" column="26" selection-start-line="151" selection-start-column="26" selection-end-line="151" selection-end-column="26" />
+            <state relative-caret-position="1692">
+              <caret line="150" column="26" selection-start-line="150" selection-start-column="26" selection-end-line="150" selection-end-column="26" />
             </state>
           </provider>
         </entry>
@@ -114,7 +109,6 @@
       <list>
         <option value="$PROJECT_DIR$/regatta.py" />
         <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch.py" />
-        <option value="$PROJECT_DIR$/.idea/workspace.xml" />
         <option value="$PROJECT_DIR$/main.py" />
       </list>
     </option>
@@ -291,17 +285,16 @@
       <window_info id="UI Designer" order="4" />
       <window_info id="Capture Tool" order="5" />
       <window_info id="Favorites" order="6" side_tool="true" />
-      <window_info anchor="bottom" id="Inspection Results" weight="0.329718" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32838285" />
-      <window_info anchor="bottom" x="1" y="2" width="1918" height="1036" id="Run" order="2" sideWeight="0.49946696" weight="0.329718" />
+      <window_info active="true" anchor="bottom" x="1" y="2" width="1918" height="1036" id="Run" order="2" sideWeight="0.49946696" visible="true" weight="0.329718" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3991323" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.329718" />
       <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Version Control" order="9" visible="true" weight="0.3275488" />
+      <window_info anchor="bottom" id="Version Control" order="9" weight="0.32838285" />
       <window_info anchor="bottom" id="FRC" order="10" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -317,22 +310,22 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/regatta.py" />
-    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch.py" />
     <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="536">
-          <caret line="347" column="10" selection-start-line="347" selection-start-column="10" selection-end-line="347" selection-end-column="10" />
+        <state relative-caret-position="119">
+          <caret line="295" column="39" lean-forward="true" selection-start-line="295" selection-start-column="39" selection-end-line="295" selection-end-column="39" />
           <folding>
-            <element signature="e#3485#3491#1" expanded="true" />
+            <element signature="e#3651#3657#1" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/regatta.py" />
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch.py" />
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1709">
-          <caret line="151" column="26" selection-start-line="151" selection-start-column="26" selection-end-line="151" selection-end-column="26" />
+        <state relative-caret-position="1692">
+          <caret line="150" column="26" selection-start-line="150" selection-start-column="26" selection-end-line="150" selection-end-column="26" />
         </state>
       </provider>
     </entry>

@@ -71,6 +71,8 @@ class Regatta:
         self.name = data['name']
         self.dates = data['regattaDates']
         self.venue = data['venue']
+        # events
+        self.events = self.buildevents(clubID)
     def getdata(self, path):
         d = requests.get(APIurl+path,headers=self.headers)
         print('data received')
@@ -82,23 +84,6 @@ class Regatta:
             print(d.status_code)
             print(d.url)
         return json.loads(d.text)
-
-    def getevents(self,data):
-        event_ids = []
-        for i in range(len(data['data'])):
-            event_ids.append(data['data'][i]['eventId'])
-        return event_ids
-
-    def findrelevantevents(self,data,clubid):
-        print('sorting events')
-        event_ids = self.getevents(data)
-        relevant_event_ids = []
-        for i in range(len(event_ids)):
-            t = self.getdata('/v4.0/regattas/'+regattaID+'/events/'+str(event_ids[i])+'/entries')
-            for j in range(t['count']):
-                if str(t['data'][j]['organizationId']) == clubid:
-                    relevant_event_ids.append(event_ids[i])
-        return relevant_event_ids
 
     def findrelevantentries(self,data,clubid):
         print('sorting entries')

@@ -67,7 +67,7 @@ class Regatta:
         self.headers = {'Authorization':self.access_token}
         self.reauthed = False
         # metadata
-        data = r.getdata('/v4.0/regattas/' + regattaID)['data']
+        data = self.getdata('/v4.0/regattas/' + regattaID)['data']
         self.name = data['name']
         self.dates = data['regattaDates']
         self.venue = data['venue']

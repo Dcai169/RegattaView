@@ -8,7 +8,7 @@ global regattaID
 global clubID
 global r
 pp = pprint.PrettyPrinter()
-regattaID = '5656'# '6033'
+regattaID = '6033'
 clubID = '1072'
 APIurl = 'https://api.regattacentral.com'
 
@@ -90,12 +90,17 @@ class Regatta:
         self.venue = data['venue']
         # events
         self.events = []
+        offlineresults = r.getdata('/v4.0/regattas/'+regattaID+'/offlineResults')
+        if offlineresults['count'] == 0:
+            self.outsidetiming = None
+        else:
+            self.outsidetiming = offlineresults['data'][0]['url']
 
-    def findrelevantentries(self,data):
+    def findrelevantentries(self,data,clubid):
         print('sorting entries')
         relevant_entry_ids = []
         for j in range(data['count']):
-            if str(data['data'][j]['organizationId']) == clubID:
+            if str(data['data'][j]['organizationId']) == clubid:
               relevant_entry_ids.append(data['data'][j]['entryId'])
         return relevant_entry_ids
 
@@ -115,11 +120,14 @@ class Regatta:
             relevant_event_ids.append(events[i]['eventId'])
         return relevant_event_ids
 
-    def buildevents(self):
+    def buildevents(self, buildallevents):
         allevents = r.getdata('/v4.0/regattas/'+regattaID+'/events')['data']
-        eventlist = self.getevents()
-        eventstobuild = self.findrelevantevents()
+        if buildallevents == False:
+            eventstobuild = self.findrelevantevents()
+        else:
+            eventstobuild = self.getevents()
         for i in range(len(eventstobuild)):
+            print('EventId: '+str(eventstobuild[i]))
             events = []
             title = ''
             sequence = 0
@@ -153,6 +161,8 @@ class Event:
         for i in range(len(data)):
             e = Entry(self.eventid,data[i]['entryId'],data[i]['entryLabel'])
             entries.append(e)
+            print(str(data[i]['entryId'])+', '+data[i]['entryLabel'])
+            i += 1
         return entries
 
     def getentrylist(self):
@@ -207,9 +217,9 @@ class Entry:
 m = Regatta()
 
 print('\n'+'='*25+'\n')
-print(m.getevents())
+print(m.buildevents(False))
 print('\n'+'='*25+'\n')
 print(r.oauth.validatetoken())
 print('\n'+'='*25+'\n')
-pp.pprint(r.getdata('/v4.0/regattas/'+regattaID+'/events/3/results')['data'][0]['lanes'][0]) # replace the last zero with an iterative variable
+
 

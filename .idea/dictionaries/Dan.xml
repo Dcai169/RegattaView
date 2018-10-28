@@ -13,7 +13,6 @@
       <w>getlane</w>
       <w>getresults</w>
       <w>iurl</w>
-      <w>lanedata</w>
       <w>lanesdata</w>
       <w>laneslist</w>
       <w>lanesout</w>
@@ -22,7 +21,6 @@
       <w>refreshtoken</w>
       <w>regattaid</w>
       <w>rvekj</w>
-      <w>timeelapsed</w>
       <w>validatetoken</w>
     </words>
   </dictionary>

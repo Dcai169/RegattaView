@@ -78,9 +78,7 @@ class Reader:
             print(d.url)
         return json.loads(d.text)
 
-
 r = Reader()
-
 
 class Regatta:
     def __init__(self):
@@ -98,11 +96,11 @@ class Regatta:
         else:
             self.outsidetiming = offlineresults['data'][0]['url']
 
-    def findrelevantentries(self,data):
+    def findrelevantentries(self,data,clubid):
         print('sorting entries')
         relevant_entry_ids = []
         for j in range(data['count']):
-            if str(data['data'][j]['organizationId']) == clubID:
+            if str(data['data'][j]['organizationId']) == clubid:
               relevant_entry_ids.append(data['data'][j]['entryId'])
         return relevant_entry_ids
 
@@ -122,24 +120,14 @@ class Regatta:
             relevant_event_ids.append(events[i]['eventId'])
         return relevant_event_ids
 
-<<<<<<< HEAD
     def buildevents(self, buildallevents):
-=======
-    def buildevents(self, clubid):
-        allevents = self.getdata('/v4.0/regattas/'+regattaID+'/events')['data']
-    def buildevents(self):
->>>>>>> master
         allevents = r.getdata('/v4.0/regattas/'+regattaID+'/events')['data']
         if buildallevents == False:
             eventstobuild = self.findrelevantevents()
         else:
             eventstobuild = self.getevents()
         for i in range(len(eventstobuild)):
-<<<<<<< HEAD
             print('EventId: '+str(eventstobuild[i]))
-=======
-            print(i)
->>>>>>> master
             events = []
             title = ''
             sequence = 0

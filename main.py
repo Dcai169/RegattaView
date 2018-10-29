@@ -128,7 +128,7 @@ class Event:
         data = self.m.getdata('/v4.0/regattas/'+regattaID+'/events/'+self.eventid+'/entries')['data']
         entries = []
         for i in range(len(data)):
-            e = Entry(self.eventid,data[i]['entryId'],data[i]['label'])
+            e = Entry(self.eventid, data[i]['entryId'], data[i]['label'])
             entries.append(e)
         return entries
 

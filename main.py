@@ -1,11 +1,13 @@
 # program init
-import json
-import requests
 from time import sleep
 from time import time
+import requests
+import pprint
+import json
 global regattaID
 global clubID
 global r
+pp = pprint.PrettyPrinter()
 regattaID = '6033'
 clubID = '1072'
 APIurl = 'https://api.regattacentral.com'
@@ -76,9 +78,7 @@ class Reader:
             print(d.url)
         return json.loads(d.text)
 
-
 r = Reader()
-
 
 class Regatta:
     def __init__(self):
@@ -90,12 +90,17 @@ class Regatta:
         self.venue = data['venue']
         # events
         self.events = []
+        offlineresults = r.getdata('/v4.0/regattas/'+regattaID+'/offlineResults')
+        if offlineresults['count'] == 0:
+            self.outsidetiming = None
+        else:
+            self.outsidetiming = offlineresults['data'][0]['url']
 
-    def findrelevantentries(self,data):
+    def findrelevantentries(self,data,clubid):
         print('sorting entries')
         relevant_entry_ids = []
         for j in range(data['count']):
-            if str(data['data'][j]['organizationId']) == clubID:
+            if str(data['data'][j]['organizationId']) == clubid:
               relevant_entry_ids.append(data['data'][j]['entryId'])
         return relevant_entry_ids
 
@@ -115,14 +120,14 @@ class Regatta:
             relevant_event_ids.append(events[i]['eventId'])
         return relevant_event_ids
 
-    def buildevents(self, clubid):
-        allevents = self.getdata('/v4.0/regattas/'+regattaID+'/events')['data']
-    def buildevents(self):
+    def buildevents(self, buildallevents):
         allevents = r.getdata('/v4.0/regattas/'+regattaID+'/events')['data']
-        eventlist = self.getevents()
-        eventstobuild = self.findrelevantevents()
+        if buildallevents == False:
+            eventstobuild = self.findrelevantevents()
+        else:
+            eventstobuild = self.getevents()
         for i in range(len(eventstobuild)):
-            print(i)
+            print('EventId: '+str(eventstobuild[i]))
             events = []
             title = ''
             sequence = 0
@@ -154,8 +159,10 @@ class Event:
         data = r.getdata('/v4.0/regattas/'+regattaID+'/events/'+self.eventid+'/entries')['data']
         entries = []
         for i in range(len(data)):
-            e = Entry(self.eventid, data[i]['entryId'], data[i]['label'])
+            e = Entry(self.eventid,data[i]['entryId'],data[i]['entryLabel'])
             entries.append(e)
+            print(str(data[i]['entryId'])+', '+data[i]['entryLabel'])
+            i += 1
         return entries
 
     def getentrylist(self):
@@ -172,9 +179,6 @@ class Event:
             if str(data['data'][j]['organizationId']) == clubID:
                 relevant_entry_ids.append(data['data'][j]['entryId'])
         return relevant_entry_ids
-
-    def update(self):
-        pass # write me
 
 
 class Entry:
@@ -210,3 +214,16 @@ class Entry:
         except TypeError:
             return None
 
+    def update(self, eventid, entryid, label):
+        if eventid != self.eventid:
+            self.eventid = eventid
+        if entryid != self.entryid:
+            self.entryid = entryid
+        if label != self.label:
+            self.label = label
+        if self.getlane(self.entryid) != self.lane:
+            self.lane = self.getlane(self.entryid)
+        if self.getlineup(self.entryid) != self.lineup:
+            self.lineup = self.getlineup(self.entryid)
+
+            

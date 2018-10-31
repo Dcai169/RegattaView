@@ -192,7 +192,7 @@ class Entry:
         self.position = 0
         self.timeelapsed = 0.0
 
-    def getresults(self,position,timeelapsed):
+    def writeresults(self,position,timeelapsed):
         self.position = position
         self.timeelapsed = timeelapsed
 
@@ -214,12 +214,16 @@ class Entry:
         except TypeError:
             return None
 
-m = Regatta()
+    def update(self, eventid, entryid, label):
+        if eventid != self.eventid:
+            self.eventid = eventid
+        if entryid != self.entryid:
+            self.entryid = entryid
+        if label != self.label:
+            self.label = label
+        if self.getlane(self.entryid) != self.lane:
+            self.lane = self.getlane(self.entryid)
+        if self.getlineup(self.entryid) != self.lineup:
+            self.lineup = self.getlineup(self.entryid)
 
-print('\n'+'='*25+'\n')
-print(m.buildevents(False))
-print('\n'+'='*25+'\n')
-print(r.oauth.validatetoken())
-print('\n'+'='*25+'\n')
-
-
+            

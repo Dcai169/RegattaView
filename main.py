@@ -1,13 +1,11 @@
 # program init
+import json
+import requests
 from time import sleep
 from time import time
-import requests
-import pprint
-import json
 global regattaID
 global clubID
 global r
-pp = pprint.PrettyPrinter()
 regattaID = '6033'
 clubID = '1072'
 APIurl = 'https://api.regattacentral.com'
@@ -211,11 +209,4 @@ class Entry:
             return lineup
         except TypeError:
             return None
-
-
-m = Regatta()
-
-print('\n'+'='*25+'\n')
-pp.pprint(m.buildevents())
-print('\n'+'='*25+'\n')
 

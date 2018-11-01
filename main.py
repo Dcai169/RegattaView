@@ -1,5 +1,4 @@
 # program init
-from time import sleep
 from time import time
 import requests
 import pprint
@@ -227,4 +226,4 @@ class Entry:
         if self.get_lineup(self.entry_id) != self.lineup:
             self.lineup = self.get_lineup(self.entry_id)
 
-            
+

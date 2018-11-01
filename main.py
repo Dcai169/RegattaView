@@ -12,50 +12,50 @@ CLUB_ID = '1072'
 APIurl = 'https://api.regattacentral.com'
 
 class OAuth:
-  def __init__(self):
-    # client credentials
-    self.client_id = '2cda3093-3efd-4ffd-933d-f95a4fd02ec6'
-    self.client_secret = 'r0WWayWest'
-    self.username = 'dcai169'
-    self.password = '77PxNIfR6rvekj76'
-    # token data
-    self.access_token = ''
-    self.expires_at = 0
-    self.refresh_token = ''
-  
-  def get_token(self):
-    print('token requested')
-    # get a token
-    try:
-      t = json.loads(requests.post(APIurl+'/oauth2/api/token', data = {'client_id':self.client_id,'client_secret':self.client_secret,'username':self.username,'password':self.password,'grant_type':'password'}).text)
-    # Catch the error
-    except json.decoder.JSONDecodeError:
-      print(requests.post(APIurl+'/oauth2/api/token', data = {'client_id':self.client_id,'client_secret':self.client_secret,'username':self.username,'password':self.password,'grant_type':'password'}).text)
-    # write token to variables
-    print('token received')
-    self.access_token = t['access_token']
-    self.expires_at = t['expires_in'] + time()
-    self.refresh_token = t['refresh_token']
-    # return token
-    return t['access_token']
+    def __init__(self):
+        # client credentials
+        self.client_id = '2cda3093-3efd-4ffd-933d-f95a4fd02ec6'
+        self.client_secret = 'r0WWayWest'
+        self.username = 'dcai169'
+        self.password = '77PxNIfR6rvekj76'
+        # token data
+        self.access_token = ''
+        self.expires_at = 0
+        self.refresh_token = ''
 
-  def refresh_token(self):
-    print('refresh token')
-    # refresh token after an hour
-    try:
-      t = json.loads(requests.post(APIurl+'/oauth2/api/token', data = {'client_id':self.client_id,'client_secret':self.client_secret, 'refresh_token':self.refresh_token, 'grant_type':'refresh_token'}).text)
-    except json.decoder.JSONDecodeError:
-      print(requests.post(APIurl+'/oauth2/api/token', data = {'client_id':self.client_id,'client_secret':self.client_secret,'refresh_token':self.refresh_token,'grant_type':'refresh_token'}).text)
-    else:
-      self.expires_at = t['expires_in'] + time()
-      self.access_token = t['access_token']
+    def get_token(self):
+        print('token requested')
+        # get a token
+        try:
+            t = json.loads(requests.post(APIurl+'/oauth2/api/token', data = {'client_id':self.client_id,'client_secret':self.client_secret,'username':self.username,'password':self.password,'grant_type':'password'}).text)
+        # Catch the error
+        except json.decoder.JSONDecodeError:
+            print(requests.post(APIurl+'/oauth2/api/token', data = {'client_id':self.client_id,'client_secret':self.client_secret,'username':self.username,'password':self.password,'grant_type':'password'}).text)
+        # write token to variables
+        print('token received')
+        self.access_token = t['access_token']
+        self.expires_at = t['expires_in'] + time()
+        self.refresh_token = t['refresh_token']
+        # return token
+        return t['access_token']
 
-  def validate_token(self):
-    t = json.loads(requests.post(APIurl+'/oauth2/api/validate', data = {'token':self.access_token}).text)
-    if 'error' in t:
-      return False
-    else:
-      return True
+    def refresh_token(self):
+        print('refresh token')
+        # refresh token after an hour
+        try:
+            t = json.loads(requests.post(APIurl+'/oauth2/api/token', data = {'client_id':self.client_id,'client_secret':self.client_secret, 'refresh_token':self.refresh_token, 'grant_type':'refresh_token'}).text)
+        except json.decoder.JSONDecodeError:
+            print(requests.post(APIurl+'/oauth2/api/token', data = {'client_id':self.client_id,'client_secret':self.client_secret,'refresh_token':self.refresh_token,'grant_type':'refresh_token'}).text)
+        else:
+            self.expires_at = t['expires_in'] + time()
+            self.access_token = t['access_token']
+
+    def validate_token(self):
+        t = json.loads(requests.post(APIurl+'/oauth2/api/validate', data = {'token':self.access_token}).text)
+        if 'error' in t:
+          return False
+        else:
+          return True
 
 class Reader:
     def __init__(self):

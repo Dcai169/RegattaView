@@ -10,20 +10,26 @@ pp = pprint.PrettyPrinter()
 REGATTA_ID = '6033'
 CLUB_ID = '1072'
 APIurl = 'https://api.regattacentral.com'
+USERNAME = 'dcai169'
+PASSWORD = '77PxNIfR6rvekj76'
 
 class OAuth:
+    # The OAuth class handles OAuth2 Authentication
     def __init__(self):
+        # This defines local variables
         # client credentials
         self.client_id = '2cda3093-3efd-4ffd-933d-f95a4fd02ec6'
         self.client_secret = 'r0WWayWest'
-        self.username = 'dcai169'
-        self.password = '77PxNIfR6rvekj76'
+        self.username = USERNAME
+        self.password = PASSWORD
         # token data
         self.access_token = ''
         self.expires_at = 0
         self.refresh_token = ''
 
     def get_token(self):
+        # This requests and receives a token from the server
+        # returns access token
         print('token requested')
         # get a token
         try:
@@ -40,6 +46,8 @@ class OAuth:
         return t['access_token']
 
     def refresh_token(self):
+        # This will refresh the token if the token has expired
+        # returns nothing, write the token to variables
         print('refresh token')
         # refresh token after an hour
         try:
@@ -51,6 +59,8 @@ class OAuth:
             self.access_token = t['access_token']
 
     def validate_token(self):
+        # This will check if the token is valid or not
+        # returns a boolean based on the validity of the token
         t = json.loads(requests.post(APIurl+'/oauth2/api/validate', data = {'token':self.access_token}).text)
         if 'error' in t:
           return False

@@ -2,8 +2,6 @@ import json
 from time import time
 import requests
 APIurl = 'https://api.regattacentral.com'
-USERNAME = 'dcai169'
-PASSWORD = '77PxNIfR6rvekj76'
 
 class OAuth2:
     # The OAuth class handles OAuth2 Authentication

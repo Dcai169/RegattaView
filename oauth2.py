@@ -5,6 +5,7 @@ import requests
 class OAuth2:
     # The OAuth2 class handles OAuth2 Authentication
     def __init__(self, api_url, client_id, client_secret, username, password):
+        self.api_url = api_url
         # client credentials
         # username and password should be user input
         # client_id and client_secret should be hardcoded

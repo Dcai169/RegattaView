@@ -1,1 +1,2 @@
-requests==2.20.0
+requests>=2.20.1
+apiaccessor>=0.0.1.1

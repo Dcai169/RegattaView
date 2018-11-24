@@ -2,7 +2,7 @@
 import requests
 import pprint
 import json
-import oauth2
+import apiaccessor
 global REGATTA_ID
 global CLUB_ID
 global r
@@ -18,8 +18,9 @@ CLIENT_SECRET = 'r0WWayWest'
 class Reader:
     def __init__(self):
         # authorization stuff
-        self.oauth = oauth2.OAuth2(CLIENT_ID, CLIENT_SECRET, USERNAME, PASSWORD)
-        self.access_token = self.oauth.get_token()
+        if __name__ == '__main__':
+            self.oauth = apiaccessor.OAuth2(APIurl+'/oauth2/api/token', APIurl+'/oauth2/api/token', APIurl+'/oauth2/api/validate', CLIENT_ID, CLIENT_SECRET)
+        self.access_token = self.oauth.get_token(USERNAME,PASSWORD)
         self.headers = {'Authorization':self.access_token}
         self.reauthed = False
 

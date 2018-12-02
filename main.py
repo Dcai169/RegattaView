@@ -1,8 +1,10 @@
 # program init
+import apiaccessor
+import credentials
 import requests
 import pprint
 import json
-import apiaccessor
+
 global REGATTA_ID
 global CLUB_ID
 global r
@@ -10,10 +12,11 @@ pp = pprint.PrettyPrinter()
 REGATTA_ID = '6033'
 CLUB_ID = '1072'
 APIurl = 'https://api.regattacentral.com'
-USERNAME = 'dcai169'
-PASSWORD = '77PxNIfR6rvekj76'
-CLIENT_ID = '2cda3093-3efd-4ffd-933d-f95a4fd02ec6'
-CLIENT_SECRET = 'r0WWayWest'
+
+USERNAME = credentials.USERNAME
+PASSWORD = credentials.PASSWORD
+CLIENT_ID = credentials.CLIENT_ID
+CLIENT_SECRET = credentials.CLIENT_SECRET
 
 class Reader:
     def __init__(self):

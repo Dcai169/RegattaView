@@ -5,8 +5,6 @@ import requests
 import pprint
 import json
 
-global REGATTA_ID
-global CLUB_ID
 global r
 pp = pprint.PrettyPrinter()
 REGATTA_ID = '6033'

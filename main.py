@@ -19,7 +19,8 @@ CLIENT_SECRET = credentials.CLIENT_SECRET
 class Reader:
     def __init__(self):
         # authorization stuff
-        self.oauth = apiaccessor.OAuth2(APIurl+'/oauth2/api/token', APIurl+'/oauth2/api/token', APIurl+'/oauth2/api/validate', CLIENT_ID, CLIENT_SECRET)
+        if __name__ == '__main__':
+            self.oauth = apiaccessor.OAuth2(APIurl+'/oauth2/api/token', APIurl+'/oauth2/api/token', APIurl+'/oauth2/api/validate', CLIENT_ID, CLIENT_SECRET)
         self.access_token = self.oauth.get_token(USERNAME,PASSWORD)
         self.headers = {'Authorization':self.access_token}
         self.reauthed = False
@@ -90,23 +91,26 @@ class Regatta:
             events = []
             title = ''
             sequence = 0
+            final_race_time = 0
             coxed = False
             for j in range(len(all_events)):
                 if all_events[j]['event_id'] == events_to_build[i]:
                     title = all_events[j]['title']
                     sequence = all_events[j]['sequence']
+                    final_race_time = all_events[j]['finalRaceTime']
                     coxed = all_events[j]['coxed']
-                e = RCEvent(events_to_build[i], title, sequence, coxed)
+                e = Event(events_to_build[i],title,sequence,final_race_time,coxed)
                 events.append(e)
         self.events = events
         return events
 
 
-class RCEvent:
-    def __init__(self, event_id, title, sequence, coxed):
+class Event:
+    def __init__(self, event_id, title, sequence, final_race_time, coxed):
         self.event_id = str(event_id)
         self.title = title
         self.sequence = sequence
+        self.final_race_time = final_race_time
         self.coxed = coxed
         self.entries = self.build_entries() # list of Entry objects
         self.relevant_entries = self.find_relevant_entries() # list of relevant entry_ids
@@ -115,9 +119,10 @@ class RCEvent:
         data = r.get_data('/v4.0/regattas/'+REGATTA_ID+'/events/'+self.event_id+'/entries')['data']
         entries = []
         for i in range(len(data)):
-            e = RCEntry(self.event_id, data[i]['entry_id'], data[i]['entryLabel'])
+            e = Entry(self.event_id,data[i]['entry_id'],data[i]['entryLabel'])
             entries.append(e)
             print(str(data[i]['entry_id'])+', '+data[i]['entryLabel'])
+            i += 1
         return entries
 
     def get_entry_list(self):
@@ -136,10 +141,11 @@ class RCEvent:
         return relevant_entry_ids
 
 
-class RCEntry:
+class Entry:
     def __init__(self, event_id, entry_id, label):
         self.event_id = event_id
         self.entry_id = entry_id
+        self.organization_id = CLUB_ID
         self.lane = self.get_lane(self.entry_id)
         self.lineup = self.get_lineup(self.entry_id)
         self.label = label
@@ -169,53 +175,13 @@ class RCEntry:
             return None
 
     def update(self, event_id, entry_id, label):
-        if event_id != self.event_id and not None:
+        if event_id != self.event_id:
             self.event_id = event_id
-        if entry_id != self.entry_id and not None:
+        if entry_id != self.entry_id:
             self.entry_id = entry_id
-        if label != self.label and not None:
+        if label != self.label:
             self.label = label
         if self.get_lane(self.entry_id) != self.lane:
             self.lane = self.get_lane(self.entry_id)
         if self.get_lineup(self.entry_id) != self.lineup:
             self.lineup = self.get_lineup(self.entry_id)
-
-
-class HNEvent:
-    def __init__(self, event_id, title, sequence, coxed):
-        self.event_id = str(event_id)
-        self.title = title
-        self.sequence = sequence
-        self.coxed = coxed
-        self.entries = [] # self.build_entries() # list of Entry objects
-        # self.relevant_entries = self.find_relevant_entries() # list of relevant entry_ids
-
-
-class HNEntry:
-    def __init__(self, event_id, entry_id, label):
-        self.event_id = event_id
-        self.entry_id = entry_id
-        self.lane = self.get_lane(self.entry_id)
-        self.lineup = self.get_lineup(self.entry_id)
-        self.label = label
-        self.position = 0
-        self.time_elapsed = 0.0
-
-    def get_lane(self,entry_id):
-        try:
-            lane_data = r.get_data('/v4.0/regattas/'+REGATTA_ID+'/events/'+entry_id+'/lanes')['data'][0]['races'][0]['lanes']
-            for i in range(len(lane_data)):
-                if lane_data[i]['entry_id'] == entry_id:
-                    return lane_data[i]['lane']
-        except TypeError:
-            return None
-
-    def get_lineup(self, entry_id):
-        try:
-            lineup = []
-            for i in range(len(r.get_data('/v4.0/regattas/'+REGATTA_ID+'/entries/'+entry_id)['data']['entryParticipants'])):
-                lineup.append(r.get_data('/v4.0/regattas/'+REGATTA_ID+'/entries/'+entry_id)['data']['entryParticipants'][i]['name'])
-            return lineup
-        except TypeError:
-            return None
-

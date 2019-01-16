@@ -8,7 +8,7 @@ import json
 global r
 REGATTA_ID = '6033'
 CLUB_ID = '1072'
-APIurl = 'https://api.regattacentral.com'
+API_URL = 'https://api.regattacentral.com'
 
 USERNAME = credentials.USERNAME
 PASSWORD = credentials.PASSWORD
@@ -19,13 +19,13 @@ class Reader:
     def __init__(self):
         # authorization stuff
         if __name__ == '__main__':
-            self.oauth = apiaccessor.OAuth2(APIurl+'/oauth2/api/token', APIurl+'/oauth2/api/token', APIurl+'/oauth2/api/validate', CLIENT_ID, CLIENT_SECRET)
+            self.oauth = apiaccessor.OAuth2(API_URL + '/oauth2/api/token', API_URL + '/oauth2/api/token', API_URL + '/oauth2/api/validate', CLIENT_ID, CLIENT_SECRET)
         self.access_token = self.oauth.get_token(USERNAME,PASSWORD)
         self.headers = {'Authorization':self.access_token}
         self.reauthed = False
 
     def get_data(self, path):
-        d = requests.get(APIurl+path,headers=self.headers)
+        d = requests.get(API_URL + path, headers=self.headers)
         print('data received')
         if d.status_code == 401 and self.reauthed == False:
             self.oauth.refresh_token()
@@ -42,14 +42,14 @@ class Regatta:
 
     __metaclass__ = ABCMeta
 
-    def __init__(self):
-        data = r.get_data('/v4.0/regattas/' + REGATTA_ID)['data']
-        self.name = data['name']
-        self.dates = data['regattaDates']
-        self.venue = data['venue']
+    @abstractmethod
+    def __init__(self, name, dates, venue, outside_timing):
+        self.name = name
+        self.dates = dates
+        self.venue = venue
         # events
         self.events = []
-        self.outside_timing = None
+        self.outside_timing = outside_timing
 
     @abstractmethod
     def find_relevant_entries(self,data):
@@ -73,16 +73,17 @@ class RCRegatta(Regatta):
         print('started fetching data')
         # metadata
         data = r.get_data('/v4.0/regattas/' + REGATTA_ID)['data']
-        self.name = data['name']
-        self.dates = data['regattaDates']
-        self.venue = data['venue']
+        name = data['name']
+        dates = data['regattaDates']
+        venue = data['venue']
         # events
         self.events = []
         offline_results = r.get_data('/v4.0/regattas/'+REGATTA_ID+'/offlineResults')
         if offline_results['count'] == 0:
-            self.outside_timing = None
+            outside_timing = None
         else:
-            self.outside_timing = offline_results['data'][0]['url']
+            outside_timing = offline_results['data'][0]['url']
+        super(RCRegatta, self).__init__(name, dates, venue, outside_timing)
 
     def find_relevant_entries(self,data):
         print('sorting entries')
@@ -132,6 +133,23 @@ class RCRegatta(Regatta):
                 events.append(e)
         self.events = events
         return events
+
+
+class HNRegatta(Regatta):
+    def __init__(self, name, dates, venue, outside_timing):
+        super(HNRegatta, self).__init__()
+
+    def find_relevant_entries(self,data):
+        pass
+
+    def get_events(self):
+        pass
+
+    def find_relevant_events(self):
+        pass
+
+    def build_events(self, build_all_events):
+        pass
 
 
 class Event:
@@ -190,6 +208,20 @@ class RCEvent(Event):
         return relevant_entry_ids
 
 
+class HNEvent(Event):
+    def __init__(self, event_id, title, sequence, final_race_time, coxed):
+        super(HNEvent, self).__init__(event_id, title, sequence, final_race_time, coxed)
+
+    def build_entries(self):
+        pass
+
+    def get_entry_list(self):
+        pass
+
+    def find_relevant_entries(self):
+        pass
+
+
 class Entry:
 
     __metaclass__ = ABCMeta
@@ -233,9 +265,8 @@ class RCEntry(Entry):
     def __init__(self, event_id, entry_id, label):
         super(RCEntry, self).__init__(event_id, entry_id, label)
 
-    def write_results(self,position,time_elapsed):
-        self.position = position
-        self.time_elapsed = time_elapsed
+    def write_results(self, position, time_elapsed):
+        super(RCEntry, self).write_results(position, time_elapsed)
 
     def get_lane(self,entry_id):
         try:
@@ -256,13 +287,21 @@ class RCEntry(Entry):
             return None
 
     def update(self, event_id, entry_id, label):
-        if event_id != self.event_id:
-            self.event_id = event_id
-        if entry_id != self.entry_id:
-            self.entry_id = entry_id
-        if label != self.label:
-            self.label = label
-        if self.get_lane(self.entry_id) != self.lane:
-            self.lane = self.get_lane(self.entry_id)
-        if self.get_lineup(self.entry_id) != self.lineup:
-            self.lineup = self.get_lineup(self.entry_id)
+        super(Entry, self).update(event_id, entry_id, label)
+
+
+class HNEntry(Entry):
+    def __init__(self, event_id, entry_id, label):
+        super(HNEntry, self).__init__(event_id, entry_id, label)
+
+    def write_results(self,position,time_elapsed):
+        super(HNEntry, self).write_results(position, time_elapsed)
+
+    def get_lane(self,entry_id):
+        pass
+
+    def get_lineup(self, entry_id):
+        pass
+
+    def update(self, event_id, entry_id, label):
+        super(Entry, self).update(event_id, entry_id, label)

@@ -1,0 +1,4 @@
+make calls to HN API
+ex. http://api.herenow.com/breeze/BreezeApi/GetScopedRaceFlights?raceId=20561&scopeStartTime=2018-10-28T04%3A00%3A00.000Z&scopeEndTime=2018-10-29T03%3A59%3A59.999Z
+
+parse response

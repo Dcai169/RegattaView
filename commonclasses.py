@@ -1,12 +1,11 @@
 # program init
+from abc import ABCMeta, abstractmethod
 import apiaccessor
 import credentials
 import requests
-import pprint
 import json
 
 global r
-pp = pprint.PrettyPrinter()
 REGATTA_ID = '6033'
 CLUB_ID = '1072'
 APIurl = 'https://api.regattacentral.com'
@@ -40,6 +39,36 @@ class Reader:
 r = Reader()
 
 class Regatta:
+
+    __metaclass__ = ABCMeta
+
+    def __init__(self):
+        data = r.get_data('/v4.0/regattas/' + REGATTA_ID)['data']
+        self.name = data['name']
+        self.dates = data['regattaDates']
+        self.venue = data['venue']
+        # events
+        self.events = []
+        self.outside_timing = None
+
+    @abstractmethod
+    def find_relevant_entries(self,data):
+        pass
+
+    @abstractmethod
+    def get_events(self):
+        pass
+
+    @abstractmethod
+    def find_relevant_events(self):
+        pass
+
+    @abstractmethod
+    def build_events(self, build_all_events):
+        pass
+
+
+class RCRegatta(Regatta):
     def __init__(self):
         print('started fetching data')
         # metadata
@@ -106,6 +135,9 @@ class Regatta:
 
 
 class Event:
+
+    __metaclass__ = ABCMeta
+
     def __init__(self, event_id, title, sequence, final_race_time, coxed):
         self.event_id = str(event_id)
         self.title = title
@@ -114,6 +146,23 @@ class Event:
         self.coxed = coxed
         self.entries = self.build_entries() # list of Entry objects
         self.relevant_entries = self.find_relevant_entries() # list of relevant entry_ids
+
+    @abstractmethod
+    def build_entries(self):
+        pass
+
+    @abstractmethod
+    def get_entry_list(self):
+        pass
+
+    @abstractmethod
+    def find_relevant_entries(self):
+        pass
+
+
+class RCEvent(Event):
+    def __init__(self, event_id, title, sequence, final_race_time, coxed):
+        super(RCEvent, self).__init__(event_id, title, sequence, final_race_time, coxed)
 
     def build_entries(self):
         data = r.get_data('/v4.0/regattas/'+REGATTA_ID+'/events/'+self.event_id+'/entries')['data']
@@ -142,6 +191,9 @@ class Event:
 
 
 class Entry:
+
+    __metaclass__ = ABCMeta
+
     def __init__(self, event_id, entry_id, label):
         self.event_id = event_id
         self.entry_id = entry_id
@@ -151,6 +203,35 @@ class Entry:
         self.label = label
         self.position = 0
         self.time_elapsed = 0.0
+
+    def write_results(self,position,time_elapsed):
+        self.position = position
+        self.time_elapsed = time_elapsed
+
+    @abstractmethod
+    def get_lane(self,entry_id):
+        pass
+
+    @abstractmethod
+    def get_lineup(self, entry_id):
+        pass
+
+    def update(self, event_id, entry_id, label):
+        if event_id != self.event_id:
+            self.event_id = event_id
+        if entry_id != self.entry_id:
+            self.entry_id = entry_id
+        if label != self.label:
+            self.label = label
+        if self.get_lane(self.entry_id) != self.lane:
+            self.lane = self.get_lane(self.entry_id)
+        if self.get_lineup(self.entry_id) != self.lineup:
+            self.lineup = self.get_lineup(self.entry_id)
+
+
+class RCEntry(Entry):
+    def __init__(self, event_id, entry_id, label):
+        super(RCEntry, self).__init__(event_id, entry_id, label)
 
     def write_results(self,position,time_elapsed):
         self.position = position

@@ -5,11 +5,10 @@ import requests
 import pprint
 import json
 
-global r
 pp = pprint.PrettyPrinter()
 REGATTA_ID = '6033'
 CLUB_ID = '1072'
-APIurl = 'https://api.regattacentral.com'
+RC_API_URL = 'https://api.regattacentral.com'
 
 USERNAME = credentials.USERNAME
 PASSWORD = credentials.PASSWORD
@@ -19,14 +18,13 @@ CLIENT_SECRET = credentials.CLIENT_SECRET
 class Reader:
     def __init__(self):
         # authorization stuff
-        if __name__ == '__main__':
-            self.oauth = apiaccessor.OAuth2(APIurl+'/oauth2/api/token', APIurl+'/oauth2/api/token', APIurl+'/oauth2/api/validate', CLIENT_ID, CLIENT_SECRET)
+        self.oauth = apiaccessor.OAuth2(RC_API_URL + '/oauth2/api/token', RC_API_URL + '/oauth2/api/token', RC_API_URL + '/oauth2/api/validate', CLIENT_ID, CLIENT_SECRET)
         self.access_token = self.oauth.get_token(USERNAME,PASSWORD)
         self.headers = {'Authorization':self.access_token}
         self.reauthed = False
 
     def get_data(self, path):
-        d = requests.get(APIurl+path,headers=self.headers)
+        d = requests.get(RC_API_URL + path, headers=self.headers)
         print('data received')
         if d.status_code == 401 and self.reauthed == False:
             self.oauth.refresh_token()
@@ -40,11 +38,13 @@ class Reader:
 r = Reader()
 
 class Regatta:
-    def __init__(self):
+    def __init__(self, regatta_id, club_id):
         print('started fetching data')
         # metadata
         data = r.get_data('/v4.0/regattas/' + REGATTA_ID)['data']
         self.name = data['name']
+        self.rc_regatta_id = regatta_id
+        self.rc_club_id = club_id
         self.dates = data['regattaDates']
         self.venue = data['venue']
         # events
@@ -104,6 +104,13 @@ class Regatta:
         self.events = events
         return events
 
+    def dump(self):
+        print(self.name)
+        print(self.dates)
+        print(self.venue)
+        print(self.events)
+        print(self.outside_timing)
+
 
 class Event:
     def __init__(self, event_id, title, sequence, final_race_time, coxed):
@@ -139,6 +146,15 @@ class Event:
             if str(data['data'][j]['organization_id']) == CLUB_ID:
                 relevant_entry_ids.append(data['data'][j]['entry_id'])
         return relevant_entry_ids
+
+    def dump(self):
+        print(self.event_id)
+        print(self.title)
+        print(self.sequence)
+        print(self.final_race_time)
+        print(self.coxed)
+        print(self.entries)
+        print(self.relevant_entries)
 
 
 class Entry:
@@ -185,3 +201,13 @@ class Entry:
             self.lane = self.get_lane(self.entry_id)
         if self.get_lineup(self.entry_id) != self.lineup:
             self.lineup = self.get_lineup(self.entry_id)
+
+    def dump(self):
+        print(self.event_id)
+        print(self.entry_id)
+        print(self.organization_id)
+        print(self.lane)
+        print(self.lineup)
+        print(self.label)
+        print(self.position)
+        print(self.time_elapsed)
